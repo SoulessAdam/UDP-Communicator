@@ -53,7 +53,7 @@ namespace UDP_UI
                 try
                 {
                     var Bytes = Client.Receive(ref endPoint);
-                    Invoke(new Action(() => { outputTxt.AppendText($"{endPoint.ToString()} <<< {System.Text.Encoding.UTF8.GetString(Bytes)}{Environment.NewLine}"); }));
+                    Invoke(new Action(() => { outputTxt.AppendText($"{endPoint} <<< {System.Text.Encoding.UTF8.GetString(Bytes)}{Environment.NewLine}"); }));
                 }
                 catch (Exception ex) { }
             }

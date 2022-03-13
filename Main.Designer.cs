@@ -168,6 +168,7 @@
             this.button2.Dock = System.Windows.Forms.DockStyle.Right;
             this.button2.FlatAppearance.BorderSize = 0;
             this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button2.Font = new System.Drawing.Font("Segoe UI", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.button2.ForeColor = System.Drawing.Color.White;
             this.button2.Location = new System.Drawing.Point(547, 0);
             this.button2.Margin = new System.Windows.Forms.Padding(0);
@@ -175,7 +176,7 @@
             this.button2.Size = new System.Drawing.Size(31, 353);
             this.button2.TabIndex = 10;
             this.button2.TabStop = false;
-            this.button2.Text = ">>";
+            this.button2.Text = "+";
             this.button2.UseVisualStyleBackColor = false;
             // 
             // Main
