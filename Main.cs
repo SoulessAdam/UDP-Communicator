@@ -12,16 +12,31 @@ namespace UDP_UI
         Thread thread;
         AdditionalSettings Settings = new AdditionalSettings();
         bool b_MenuOpen = false;
-
+        bool b_MenuDisposed = false;
+        
         public Main()
         {
             InitializeComponent();
+            handleSettingsDisposal();
             InitSendTxt();  
             InitSocket();
             StartLoops();
         }
 
 
+        public void setDisposalHook()
+        {
+            Settings.Disposed += event_SettingsDisposed;
+        }
+
+        public void event_SettingsDisposed(object? sender, EventArgs e)
+        {
+            b_MenuOpen = false;
+            b_MenuDisposed = true;
+            Invoke(new Action(() => {
+                menuButton.Text = "+";
+            }));
+        }
         public void InitSendTxt()
         {
             IPAddress[] Addresses = Dns.GetHostEntry(Dns.GetHostName()).AddressList;
@@ -76,11 +91,11 @@ namespace UDP_UI
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (Settings.IsDisposed) Settings = new AdditionalSettings(); 
+            if (Settings.IsDisposed) { Settings = new AdditionalSettings(); b_MenuDisposed = false; setDisposalHook(); }; 
             if (!b_MenuOpen) {
                 Settings.Show();
                 b_MenuOpen = true;
-                menuButton.Text = "X";
+                menuButton.Text = "x";
             } else {
                 Settings.Hide();
                 b_MenuOpen = false;
