@@ -76,6 +76,7 @@ namespace UDP_UI
 
         private void button2_Click(object sender, EventArgs e)
         {
+            if (Settings.IsDisposed) Settings = new AdditionalSettings(); 
             if (!b_MenuOpen) {
                 Settings.Show();
                 b_MenuOpen = true;

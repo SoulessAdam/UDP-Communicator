@@ -38,7 +38,7 @@
             this.button1 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.IPTxt = new System.Windows.Forms.TextBox();
-            this.button2 = new System.Windows.Forms.Button();
+            this.menuButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // outputTxt
@@ -162,22 +162,23 @@
             this.IPTxt.Size = new System.Drawing.Size(355, 23);
             this.IPTxt.TabIndex = 9;
             // 
-            // button2
+            // menuButton
             // 
-            this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.button2.Dock = System.Windows.Forms.DockStyle.Right;
-            this.button2.FlatAppearance.BorderSize = 0;
-            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button2.Font = new System.Drawing.Font("Segoe UI", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.button2.ForeColor = System.Drawing.Color.White;
-            this.button2.Location = new System.Drawing.Point(547, 0);
-            this.button2.Margin = new System.Windows.Forms.Padding(0);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(31, 353);
-            this.button2.TabIndex = 10;
-            this.button2.TabStop = false;
-            this.button2.Text = "+";
-            this.button2.UseVisualStyleBackColor = false;
+            this.menuButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.menuButton.Dock = System.Windows.Forms.DockStyle.Right;
+            this.menuButton.FlatAppearance.BorderSize = 0;
+            this.menuButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.menuButton.Font = new System.Drawing.Font("Segoe UI", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.menuButton.ForeColor = System.Drawing.Color.White;
+            this.menuButton.Location = new System.Drawing.Point(547, 0);
+            this.menuButton.Margin = new System.Windows.Forms.Padding(0);
+            this.menuButton.Name = "menuButton";
+            this.menuButton.Size = new System.Drawing.Size(31, 353);
+            this.menuButton.TabIndex = 10;
+            this.menuButton.TabStop = false;
+            this.menuButton.Text = "+";
+            this.menuButton.UseVisualStyleBackColor = false;
+            this.menuButton.Click += new System.EventHandler(this.button2_Click);
             // 
             // Main
             // 
@@ -185,7 +186,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
             this.ClientSize = new System.Drawing.Size(578, 353);
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.menuButton);
             this.Controls.Add(this.IPTxt);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.button1);
@@ -215,6 +216,6 @@
         private Button button1;
         private Label label2;
         private TextBox IPTxt;
-        private Button button2;
+        private Button menuButton;
     }
 }
