@@ -17,7 +17,7 @@ namespace UDP_UI
         public Main()
         {
             InitializeComponent();
-            handleSettingsDisposal();
+            setDisposalHook();
             InitSendTxt();  
             InitSocket();
             StartLoops();
