@@ -10,6 +10,9 @@ namespace UDP_UI
         UdpClient Client;
         IPEndPoint endPoint;
         Thread thread;
+        AdditionalSettings Settings = new AdditionalSettings();
+        bool b_MenuOpen = false;
+
         public Main()
         {
             InitializeComponent();
@@ -69,6 +72,19 @@ namespace UDP_UI
             var text = System.Text.Encoding.UTF8.GetBytes(messageSendTxt.Text);
             IPEndPoint endpnt = new IPEndPoint(IPAddress.Parse(IPTxt.Text), int.Parse(sendPortTxt.Text));
             Client.Send(text, endpnt);
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (!b_MenuOpen) {
+                Settings.Show();
+                b_MenuOpen = true;
+                menuButton.Text = "X";
+            } else {
+                Settings.Hide();
+                b_MenuOpen = false;
+                menuButton.Text = "+";
+            }
         }
     }
 }
