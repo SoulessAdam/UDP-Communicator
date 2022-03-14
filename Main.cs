@@ -112,7 +112,10 @@ namespace UDP_UI
         private void debugBtn_Click(object sender, EventArgs e)
         {
             Aes.setEncryptKey(System.Text.Encoding.UTF8.GetBytes("SIXTEENCHARACTRS"));
-            outputTxt.AppendText("[DEBUG ENCRYPT] <<< " + Convert.ToBase64String(Aes.encryptOutgoing("Test Message")) + "" +Environment.NewLine);
+            Aes.setDecryptKey(System.Text.Encoding.UTF8.GetBytes("SIXTEENCHARACTRS"));
+            var b = Aes.encryptOutgoing("Test Message");
+            //outputTxt.AppendText("[DEBUG ENCRYPT] <<< " + "Message: " + Convert.ToBase64String(b[1]) + $" Key: SIXTEENCHARACTRS IV: {Convert.ToBase64String(b[0])}" +Environment.NewLine);
+            outputTxt.AppendText($"[TESTING DECRYPT] {Aes.decryptIncoming(b)} {Environment.NewLine}");
         }
     }
 }
