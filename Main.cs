@@ -2,17 +2,23 @@ using System;
 using System.Net.Sockets;
 using System.Net;
 using System.Threading;
+using System.Security.Cryptography;
 
 namespace UDP_UI
 {
     public partial class Main : Form
     {
+        public static bool incomingDecrypt = false;
+        public static bool outgoingDecrypt = false;
+
+        Modules.Encryption.AesModule Aes = new Modules.Encryption.AesModule(); 
         UdpClient Client;
         IPEndPoint endPoint;
         Thread thread;
         AdditionalSettings Settings = new AdditionalSettings();
         bool b_MenuOpen = false;
         bool b_MenuDisposed = false;
+        public int a;
         
         public Main()
         {
@@ -101,6 +107,12 @@ namespace UDP_UI
                 b_MenuOpen = false;
                 menuButton.Text = "+";
             }
+        }
+
+        private void debugBtn_Click(object sender, EventArgs e)
+        {
+            Aes.setEncryptKey(System.Text.Encoding.UTF8.GetBytes("SIXTEENCHARACTRS"));
+            outputTxt.AppendText("[DEBUG ENCRYPT] <<< " + Convert.ToBase64String(Aes.encryptOutgoing("Test Message")) + "" +Environment.NewLine);
         }
     }
 }
