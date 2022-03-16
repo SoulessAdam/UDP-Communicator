@@ -34,18 +34,13 @@ namespace UDP_UI.Modules
             {
                 _encrypt.GenerateIV();
                 byte[] buff;
-                using (var encryptor = _encrypt.CreateEncryptor())
-                {
-                    using (var memStream = new MemoryStream())
-                    {
-                        using (var csEncrypt = new CryptoStream(memStream, encryptor, CryptoStreamMode.Write))
-                        {
-                            using (var bw = new BinaryWriter(csEncrypt, Encoding.UTF8))
-                            {
+                using (var encryptor = _encrypt.CreateEncryptor()){
+                    using (var memStream = new MemoryStream()){
+                        using (var csEncrypt = new CryptoStream(memStream, encryptor, CryptoStreamMode.Write)){
+                            using (var bw = new BinaryWriter(csEncrypt, Encoding.UTF8)){
                                 bw.Write(text);
                                 bw.Close();
                                 buff = memStream.ToArray();
-
                             }
                         }
                     }
@@ -63,14 +58,10 @@ namespace UDP_UI.Modules
                 _decrypt.IV = IV;
 
                 string output;
-                using (var decryptor = _decrypt.CreateDecryptor())
-                {
-                    using (MemoryStream ms = new MemoryStream(Cipher))
-                    {
-                        using (CryptoStream cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Read))
-                        {
-                            using (StreamReader sr = new StreamReader(cs))
-                            {
+                using (var decryptor = _decrypt.CreateDecryptor()){
+                    using (MemoryStream ms = new MemoryStream(Cipher)){
+                        using (CryptoStream cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Read)){
+                            using (StreamReader sr = new StreamReader(cs)){
                                 output = sr.ReadToEnd();
                             }
                         }
