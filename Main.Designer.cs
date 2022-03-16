@@ -39,7 +39,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.IPTxt = new System.Windows.Forms.TextBox();
             this.menuButton = new System.Windows.Forms.Button();
-            this.debugBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // outputTxt
@@ -174,31 +173,19 @@
             this.menuButton.Location = new System.Drawing.Point(547, 0);
             this.menuButton.Margin = new System.Windows.Forms.Padding(0);
             this.menuButton.Name = "menuButton";
-            this.menuButton.Size = new System.Drawing.Size(31, 404);
+            this.menuButton.Size = new System.Drawing.Size(31, 355);
             this.menuButton.TabIndex = 10;
             this.menuButton.TabStop = false;
             this.menuButton.Text = "+";
             this.menuButton.UseVisualStyleBackColor = false;
             this.menuButton.Click += new System.EventHandler(this.button2_Click);
             // 
-            // debugBtn
-            // 
-            this.debugBtn.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.debugBtn.Location = new System.Drawing.Point(12, 369);
-            this.debugBtn.Name = "debugBtn";
-            this.debugBtn.Size = new System.Drawing.Size(526, 23);
-            this.debugBtn.TabIndex = 11;
-            this.debugBtn.Text = "Secret Button!";
-            this.debugBtn.UseVisualStyleBackColor = true;
-            this.debugBtn.Click += new System.EventHandler(this.debugBtn_Click);
-            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
-            this.ClientSize = new System.Drawing.Size(578, 404);
-            this.Controls.Add(this.debugBtn);
+            this.ClientSize = new System.Drawing.Size(578, 355);
             this.Controls.Add(this.menuButton);
             this.Controls.Add(this.IPTxt);
             this.Controls.Add(this.label2);
@@ -230,6 +217,5 @@
         private Label label2;
         private TextBox IPTxt;
         private Button menuButton;
-        private Button debugBtn;
     }
 }
