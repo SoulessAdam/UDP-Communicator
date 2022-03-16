@@ -45,7 +45,7 @@ namespace UDP_UI.Modules
                                 bw.Write(text);
                                 bw.Close();
                                 buff = memStream.ToArray();
-                                
+
                             }
                         }
                     }
@@ -63,27 +63,32 @@ namespace UDP_UI.Modules
                 _decrypt.IV = IV;
 
                 string output;
-                using (var decryptor = _decrypt.CreateDecryptor()) {
-                    using (MemoryStream ms = new MemoryStream(Cipher)) {
-                        using (CryptoStream cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Read)) {
-                            using (StreamReader sr = new StreamReader(cs)) {
+                using (var decryptor = _decrypt.CreateDecryptor())
+                {
+                    using (MemoryStream ms = new MemoryStream(Cipher))
+                    {
+                        using (CryptoStream cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Read))
+                        {
+                            using (StreamReader sr = new StreamReader(cs))
+                            {
                                 output = sr.ReadToEnd();
                             }
                         }
                     }
                 }
-
-
-                return output;
+                return output.TrimStart();
             }
 
             public string[] parseBase64(string b64)
             {
                 var sides = b64.Split("*");
                 var IV = sides[0];
-                var Cipher = sides[1];  
-                return new string[] {IV, Cipher};
+                var Cipher = sides[1];
+                return new string[] { IV, Cipher };
             }
+
+            
+            
         }
     }
 }

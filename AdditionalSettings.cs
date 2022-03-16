@@ -15,9 +15,6 @@
             } else {
                 MessageBox.Show("Invalid Key (Must be 16 bytes long)", "Decryption has now been disabled until a valid key has been entered");
                 Main.incomingDecrypt = false;
-
-
-                
             }
         }
     }

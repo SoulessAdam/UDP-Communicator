@@ -1,8 +1,5 @@
-using System;
-using System.Net.Sockets;
 using System.Net;
-using System.Threading;
-using System.Security.Cryptography;
+using System.Net.Sockets;
 
 namespace UDP_UI
 {
@@ -10,8 +7,8 @@ namespace UDP_UI
     {
         public static bool incomingDecrypt = false;
         public static bool outgoingDecrypt = false;
-
-        Modules.Encryption.AesModule Aes = new Modules.Encryption.AesModule(); 
+        public static Main mainHandle;
+        Modules.Encryption.AesModule Aes = new Modules.Encryption.AesModule();
         UdpClient Client;
         IPEndPoint endPoint;
         Thread thread;
@@ -19,14 +16,16 @@ namespace UDP_UI
         bool b_MenuOpen = false;
         bool b_MenuDisposed = false;
         public int a;
-        
+
         public Main()
         {
             InitializeComponent();
+            mainHandle = this;
             setDisposalHook();
-            InitSendTxt();  
+            InitSendTxt();
             InitSocket();
             StartLoops();
+            
         }
 
 
@@ -39,16 +38,17 @@ namespace UDP_UI
         {
             b_MenuOpen = false;
             b_MenuDisposed = true;
-            Invoke(new Action(() => {
+            Invoke(new Action(() =>
+            {
                 menuButton.Text = "+";
             }));
         }
         public void InitSendTxt()
         {
             IPAddress[] Addresses = Dns.GetHostEntry(Dns.GetHostName()).AddressList;
-            foreach(IPAddress address in Addresses)
+            foreach (IPAddress address in Addresses)
             {
-                if(address.AddressFamily == AddressFamily.InterNetwork)
+                if (address.AddressFamily == AddressFamily.InterNetwork)
                 {
                     IPTxt.Text = address.ToString();
                     break;
@@ -65,14 +65,14 @@ namespace UDP_UI
 
         public void InitSocket()
         {
-            if(Client != null) { Client.Close(); Client.Dispose(); }
+            if (Client != null) { Client.Close(); Client.Dispose(); }
             Client = new UdpClient(int.Parse(portBox.Text));
             endPoint = new IPEndPoint(IPAddress.Any, int.Parse(portBox.Text));
         }
 
         public void ListenLoop()
         {
-            while(Client != null)
+            while (Client != null)
             {
                 try
                 {
@@ -97,12 +97,15 @@ namespace UDP_UI
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (Settings.IsDisposed) { Settings = new AdditionalSettings(); b_MenuDisposed = false; setDisposalHook(); }; 
-            if (!b_MenuOpen) {
+            if (Settings.IsDisposed) { Settings = new AdditionalSettings(); b_MenuDisposed = false; setDisposalHook(); };
+            if (!b_MenuOpen)
+            {
                 Settings.Show();
                 b_MenuOpen = true;
                 menuButton.Text = "x";
-            } else {
+            }
+            else
+            {
                 Settings.Hide();
                 b_MenuOpen = false;
                 menuButton.Text = "+";
@@ -116,6 +119,14 @@ namespace UDP_UI
             var b = Aes.encryptOutgoing("Test Message");
             //outputTxt.AppendText("[DEBUG ENCRYPT] <<< " + "Message: " + Convert.ToBase64String(b[1]) + $" Key: SIXTEENCHARACTRS IV: {Convert.ToBase64String(b[0])}" +Environment.NewLine);
             outputTxt.AppendText($"[TESTING DECRYPT] {Aes.decryptIncoming(b)} {Environment.NewLine}");
+        }
+
+        public void invokeWrite(string text)
+        {
+            outputTxt.Invoke(new Action(() =>
+            {
+                outputTxt.AppendText(text);
+            }));
         }
     }
 }
