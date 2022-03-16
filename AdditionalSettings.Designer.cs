@@ -58,6 +58,7 @@
             this.incomingSaveBtn.TabIndex = 1;
             this.incomingSaveBtn.Text = "Save";
             this.incomingSaveBtn.UseVisualStyleBackColor = false;
+            this.incomingSaveBtn.Click += new System.EventHandler(this.incomingSaveBtn_click);
             // 
             // outgoingKeyTxt
             // 
@@ -80,6 +81,7 @@
             this.outgoingSaveBtn.TabIndex = 3;
             this.outgoingSaveBtn.Text = "Save";
             this.outgoingSaveBtn.UseVisualStyleBackColor = false;
+            this.outgoingSaveBtn.Click += new System.EventHandler(this.outgoingSaveBtn_click);
             // 
             // Disclaimer
             // 

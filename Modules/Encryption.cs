@@ -9,6 +9,8 @@ namespace UDP_UI.Modules
         {
             private Aes _decrypt = Aes.Create();
             private Aes _encrypt = Aes.Create();
+            public bool incomingKeySet = false;
+            public bool outgoingKeySet = false;
 
             public AesModule()
             {
@@ -23,11 +25,13 @@ namespace UDP_UI.Modules
             public void setEncryptKey(byte[] key)
             {
                 _encrypt.Key = key;
+                incomingKeySet = true;
             }
 
             public void setDecryptKey(byte[] key)
             {
                 _decrypt.Key = key;
+                outgoingKeySet = true;
             }
 
             public string encryptOutgoing(string text)
@@ -51,6 +55,7 @@ namespace UDP_UI.Modules
             public string decryptIncoming(string IVCipher_Base64)
             {
                 string[] parsed = parseBase64(IVCipher_Base64);
+                if (parsed[0] == "Invalid") return "[ERROR] Invalid data to decrypt recieved.";
                 string IV_Base64 = parsed[0];
                 string Cipher_Base64 = parsed[1];
                 byte[] IV = System.Convert.FromBase64String(IV_Base64);
@@ -58,28 +63,35 @@ namespace UDP_UI.Modules
                 _decrypt.IV = IV;
 
                 string output;
-                using (var decryptor = _decrypt.CreateDecryptor()){
-                    using (MemoryStream ms = new MemoryStream(Cipher)){
-                        using (CryptoStream cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Read)){
-                            using (StreamReader sr = new StreamReader(cs)){
-                                output = sr.ReadToEnd();
+                try
+                {
+                    using (var decryptor = _decrypt.CreateDecryptor()){
+                        using (MemoryStream ms = new MemoryStream(Cipher)){
+                            using (CryptoStream cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Read)){
+                                using (StreamReader sr = new StreamReader(cs)){
+                                    output = sr.ReadToEnd();
+                                }
                             }
                         }
                     }
+                } catch (Exception ex)
+                {
+                    return "[ERROR] Please ensure decryption key is correct.";
                 }
                 return output.TrimStart();
             }
 
             public string[] parseBase64(string b64)
             {
-                var sides = b64.Split("*");
-                var IV = sides[0];
-                var Cipher = sides[1];
-                return new string[] { IV, Cipher };
+                if (b64.Contains("*"))
+                {
+                    var sides = b64.Split("*");
+                    var IV = sides[0];
+                    var Cipher = sides[1];
+                    return new string[] { IV, Cipher };
+                }
+                else return new string[] { "Invalid" };
             }
-
-            
-            
         }
     }
 }

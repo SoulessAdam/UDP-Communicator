@@ -6,12 +6,13 @@ namespace UDP_UI
     public partial class Main : Form
     {
         public static bool incomingDecrypt = false;
-        public static bool outgoingDecrypt = false;
+        public static bool outgoingEncrypt = false;
+        public bool clientInit = false;
         public static Main mainHandle;
-        Modules.Encryption.AesModule Aes = new Modules.Encryption.AesModule();
-        UdpClient Client;
-        IPEndPoint endPoint;
-        Thread thread;
+        public Modules.Encryption.AesModule Aes = new Modules.Encryption.AesModule();
+        static UdpClient? Client;
+        IPEndPoint? endPoint;
+        Thread? thread;
         AdditionalSettings Settings = new AdditionalSettings();
         bool b_MenuOpen = false;
         bool b_MenuDisposed = false;
@@ -24,7 +25,6 @@ namespace UDP_UI
             setDisposalHook();
             InitSendTxt();
             InitSocket();
-            StartLoops();
             
         }
 
@@ -38,10 +38,14 @@ namespace UDP_UI
         {
             b_MenuOpen = false;
             b_MenuDisposed = true;
-            Invoke(new Action(() =>
+            try
             {
-                menuButton.Text = "+";
-            }));
+                Invoke(new Action(() =>
+                {
+                    menuButton.Text = "+";
+                }));
+            }
+            catch (Exception ex) { Application.Exit(); };
         }
         public void InitSendTxt()
         {
@@ -63,23 +67,35 @@ namespace UDP_UI
             thread.Start();
         }
 
-        public void InitSocket()
+        public async void InitSocket()
         {
-            if (Client != null) { Client.Close(); Client.Dispose(); }
+            if (Client != null) { Client.Close(); Client.Dispose(); clientInit = false; }
             Client = new UdpClient(int.Parse(portBox.Text));
             endPoint = new IPEndPoint(IPAddress.Any, int.Parse(portBox.Text));
+            await Task.Delay(500);
+            clientInit = true;
+            StartLoops();
         }
 
         public void ListenLoop()
         {
-            while (Client != null)
+            while (Client != null && clientInit)
             {
-                try
-                {
-                    var Bytes = Client.Receive(ref endPoint);
-                    Invoke(new Action(() => { outputTxt.AppendText($"{endPoint} <<< {System.Text.Encoding.UTF8.GetString(Bytes)}{Environment.NewLine}"); }));
+                try {
+                    var t_messageBytes = Client.Receive(ref endPoint);
+                    var t_message = System.Text.Encoding.UTF8.GetString(t_messageBytes);
+                    string incomingMessage;
+                    if (incomingDecrypt && Aes.incomingKeySet) {
+                        incomingMessage = Aes.decryptIncoming(t_message); 
+                    } else {
+                        incomingMessage = t_message;
+                    }
+                    Invoke(new Action(() => { outputTxt.AppendText($"{endPoint} <<< {incomingMessage}{Environment.NewLine}"); }));
                 }
-                catch (Exception ex) { }
+                catch(System.Net.Sockets.SocketException) { }
+                catch (Exception ex) {
+                    MessageBox.Show(ex.StackTrace, ex.Message);
+                }
             }
         }
 
@@ -90,9 +106,15 @@ namespace UDP_UI
 
         private void SendBtn(object sender, EventArgs e)
         {
-            var text = System.Text.Encoding.UTF8.GetBytes(messageSendTxt.Text);
+            string t_Message = messageSendTxt.Text;
+            string message;
+            if (outgoingEncrypt && Aes.outgoingKeySet) {
+                message = Aes.encryptOutgoing(t_Message);
+            } else {
+                message = t_Message;
+            }
             IPEndPoint endpnt = new IPEndPoint(IPAddress.Parse(IPTxt.Text), int.Parse(sendPortTxt.Text));
-            Client.Send(text, endpnt);
+            Client.Send(System.Text.Encoding.UTF8.GetBytes(message), endpnt);
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -112,21 +134,39 @@ namespace UDP_UI
             }
         }
 
-        private void debugBtn_Click(object sender, EventArgs e)
-        {
-            Aes.setEncryptKey(System.Text.Encoding.UTF8.GetBytes("SIXTEENCHARACTRS"));
-            Aes.setDecryptKey(System.Text.Encoding.UTF8.GetBytes("SIXTEENCHARACTRS"));
-            var b = Aes.encryptOutgoing("Test Message");
-            //outputTxt.AppendText("[DEBUG ENCRYPT] <<< " + "Message: " + Convert.ToBase64String(b[1]) + $" Key: SIXTEENCHARACTRS IV: {Convert.ToBase64String(b[0])}" +Environment.NewLine);
-            outputTxt.AppendText($"[TESTING DECRYPT] {Aes.decryptIncoming(b)} {Environment.NewLine}");
-        }
-
         public void invokeWrite(string text)
         {
             outputTxt.Invoke(new Action(() =>
             {
                 outputTxt.AppendText(text);
             }));
+        }
+
+
+        bool o_messageShown = false; // Setting bools so that when reversing the checkbox change, only one message box is shown.
+        bool i_messageShown = false;
+        private void outgoingCheckBoxUpdated(object sender, EventArgs e)
+        {
+            if(!Aes.outgoingKeySet) { 
+                if (!o_messageShown) { 
+                    MessageBox.Show("Key is not set, option not valid.", "Decryption Error"); 
+                }
+                o_messageShown = !o_messageShown;
+                outgoingCheckBox.Checked = false; 
+            }
+            outgoingEncrypt = outgoingCheckBox.Checked;
+        }
+
+        private void incomingCheckBoxUpdated(object sender, EventArgs e)
+        {
+            if(!Aes.incomingKeySet) { 
+                if (!i_messageShown) {
+                    MessageBox.Show("Key is not set, option not valid.", "Encryption Error"); 
+                }
+                i_messageShown = !i_messageShown;
+                incomingCheckBox.Checked = false; 
+            }
+            incomingDecrypt = incomingCheckBox.Checked;
         }
     }
 }

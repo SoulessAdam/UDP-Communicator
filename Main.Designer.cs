@@ -39,6 +39,9 @@
             this.label2 = new System.Windows.Forms.Label();
             this.IPTxt = new System.Windows.Forms.TextBox();
             this.menuButton = new System.Windows.Forms.Button();
+            this.outgoingCheckBox = new System.Windows.Forms.CheckBox();
+            this.incomingCheckBox = new System.Windows.Forms.CheckBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // outputTxt
@@ -173,19 +176,52 @@
             this.menuButton.Location = new System.Drawing.Point(547, 0);
             this.menuButton.Margin = new System.Windows.Forms.Padding(0);
             this.menuButton.Name = "menuButton";
-            this.menuButton.Size = new System.Drawing.Size(31, 355);
+            this.menuButton.Size = new System.Drawing.Size(31, 370);
             this.menuButton.TabIndex = 10;
             this.menuButton.TabStop = false;
             this.menuButton.Text = "+";
             this.menuButton.UseVisualStyleBackColor = false;
             this.menuButton.Click += new System.EventHandler(this.button2_Click);
             // 
+            // outgoingCheckBox
+            // 
+            this.outgoingCheckBox.AutoSize = true;
+            this.outgoingCheckBox.Location = new System.Drawing.Point(12, 343);
+            this.outgoingCheckBox.Name = "outgoingCheckBox";
+            this.outgoingCheckBox.Size = new System.Drawing.Size(120, 19);
+            this.outgoingCheckBox.TabIndex = 11;
+            this.outgoingCheckBox.Text = "Encrypt Outgoing";
+            this.outgoingCheckBox.UseVisualStyleBackColor = true;
+            this.outgoingCheckBox.CheckedChanged += new System.EventHandler(this.outgoingCheckBoxUpdated);
+            // 
+            // incomingCheckBox
+            // 
+            this.incomingCheckBox.AutoSize = true;
+            this.incomingCheckBox.Location = new System.Drawing.Point(138, 343);
+            this.incomingCheckBox.Name = "incomingCheckBox";
+            this.incomingCheckBox.Size = new System.Drawing.Size(121, 19);
+            this.incomingCheckBox.TabIndex = 12;
+            this.incomingCheckBox.Text = "Decrypt Incoming";
+            this.incomingCheckBox.UseVisualStyleBackColor = true;
+            this.incomingCheckBox.CheckedChanged += new System.EventHandler(this.incomingCheckBoxUpdated);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(265, 346);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(0, 15);
+            this.label3.TabIndex = 13;
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
-            this.ClientSize = new System.Drawing.Size(578, 355);
+            this.ClientSize = new System.Drawing.Size(578, 370);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.incomingCheckBox);
+            this.Controls.Add(this.outgoingCheckBox);
             this.Controls.Add(this.menuButton);
             this.Controls.Add(this.IPTxt);
             this.Controls.Add(this.label2);
@@ -217,5 +253,8 @@
         private Label label2;
         private TextBox IPTxt;
         private Button menuButton;
+        private CheckBox outgoingCheckBox;
+        private CheckBox incomingCheckBox;
+        private Label label3;
     }
 }
